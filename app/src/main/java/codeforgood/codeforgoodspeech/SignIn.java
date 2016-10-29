@@ -144,6 +144,12 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+
+        UserAuthPubKey session=new UserAuthPubKey();
+        System.out.println("Created session");
+        session.logon();
+        System.out.println("Logged on");
+
         if (mAuthTask != null) {
             return;
         }
@@ -160,7 +166,7 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password, session)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -171,7 +177,7 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!isEmailValid(email, session)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -190,12 +196,12 @@ public class SignIn extends AppCompatActivity implements LoaderCallbacks<Cursor>
         }
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean isEmailValid(String email,UserAuthPubKey session) {
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
+    private boolean isPasswordValid(String password, UserAuthPubKey session) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
     }
